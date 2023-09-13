@@ -4,9 +4,16 @@ register = template.Library()
 
 CENSOR_WORDS = ['Путин']
 
+class CensorException(Exception):
+    def __str__(self):
+        return 'Фильтр обрабытвает только текст'
 
 @register.filter()
 def censor(value):
+
+    if not isinstance(value, str):
+        raise CensorException
+
     text = value.split()
     new_value = []
 
@@ -21,7 +28,7 @@ def censor(value):
 
 
 def main():
-    print(censor('США следует убедить Зеленского отказаться от указа о запрете переговоров с Россией, пока ее возглавляет Путин, если считают, что Киев готов к диалогу, заявил российский лидер'))
+    print(censor(4))
 
 
 if __name__ == '__main__':
