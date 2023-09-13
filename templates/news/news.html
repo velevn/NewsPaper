@@ -1,5 +1,7 @@
 {% extends 'news/default.html' %}
 
+{% load censor_filters %}
+
 {% block title %} Новости {% endblock %}
 
 {% block content %} 
@@ -20,7 +22,7 @@
                 <tr>
                     <td>{{ post.titlePost }}</td>
                     <td>{{ post.dateCreate|date:'d M Y' }}</td>
-                    <td>{{ post.textPost|truncatewords:20 }}</td>
+                    <td>{{ post.textPost|truncatewords:20}}</td>
                 </tr>
             {% endfor %}
         </table>
