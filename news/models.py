@@ -20,6 +20,10 @@ class Author(models.Model):
         self.rating_user = postRat*3 + commRat
         self.save()
 
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
+
 
 class Category(models.Model):
     name_category = models.CharField(max_length=64, unique=True)
@@ -54,6 +58,15 @@ class Post(models.Model):
 
     def preview(self):
         return "{%s}" % (self.textPost[0:124])
+    
+    def __str__(self) -> str:
+        return f'{self.titlePost}: {self.textPost[:20]}'
+
+    class Meta:
+        verbose_name = 'Статья'
+        verbose_name_plural = 'Статьи'
+        ordering = ('-dateCreate',)
+
 
 
 class PostCategory(models.Model):

@@ -1,0 +1,11 @@
+{% extends 'news/default.html' %}
+
+{% block title %} Новости {% endblock %}
+
+{% block content %} 
+    <h1>{{ post_list.titlePost }}</h1>
+    {{ post_list.dateCreate|date:'d M Y' }}
+    <hr>
+    {{ post_list.textPost }}
+    
+{% endblock %}

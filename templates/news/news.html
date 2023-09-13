@@ -1,0 +1,34 @@
+{% extends 'news/default.html' %}
+
+{% block title %} Новости {% endblock %}
+
+{% block content %} 
+    <h1>Все новости</h1>
+
+    <h3>{{ time_now|date:'M d Y' }}</h3>
+    <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>
+    <hr>
+    <h5>Количество новостей: {{ posts_list|length}}</h5>
+    {% if posts_list %}
+        <table>
+            <tr>
+                <td>Заголовок</td>
+                <td>Дата публикации</td>
+                <td>Текст новости</td>
+            </tr>
+            {% for post in posts_list %}
+                <tr>
+                    <td>{{ post.titlePost }}</td>
+                    <td>{{ post.dateCreate|date:'d M Y' }}</td>
+                    <td>{{ post.textPost|truncatewords:20 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    
+    {% else %}
+        <h2>Новостей нет</h2>
+
+    {% endif %}
+
+
+{% endblock %}
