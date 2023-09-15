@@ -1,9 +1,10 @@
 from typing import Any
 from django.db.models.query import QuerySet
+from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Post
 from .filters import PostFilter
-
+from .forms import PostForm
 
 class PostList(ListView):
     model = Post
@@ -26,3 +27,8 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'news/single_news.html'
     context_object_name = 'post_list'
+
+
+def create_post(request):
+    form = PostForm()
+    return render(request,'news/create_post.html', {'form':form})
