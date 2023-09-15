@@ -6,6 +6,7 @@ from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
 
+
 class PostList(ListView):
     model = Post
     template_name = 'news/news.html'
@@ -27,6 +28,10 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'news/single_news.html'
     context_object_name = 'post_list'
+
+
+def show_home(request):
+    return render(request,'news/index.html')
 
 
 def create_post(request):
