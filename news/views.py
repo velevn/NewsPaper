@@ -1,5 +1,6 @@
 from typing import Any
 from django.db.models.query import QuerySet
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView
 from .models import Post
@@ -30,10 +31,16 @@ class PostDetail(DetailView):
     context_object_name = 'post_list'
 
 
-def show_home(request):
-    return render(request,'news/index.html')
-
-
 def create_post(request):
     form = PostForm()
-    return render(request,'news/create_post.html', {'form':form})
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/news')
+
+    return render(request, 'news/create_post.html', {'form': form})
+
+
+def show_home(request):
+    return render(request, 'news/index.html')
