@@ -1,0 +1,36 @@
+{% extends 'news/default.html' %}
+
+{% load censor_filters %}  
+{% load custom_tags %}
+
+{% block title %} Поиск новости {% endblock %}
+
+{% block content %}
+
+    <form action="" method="get">
+        {{ filterset.form.as_p }}
+        <input type="submit" value="Найти">
+    </form>
+
+    {% if filter_list %}
+        <table>
+            <tr>
+                <td><h5>Заголовок</h5></td>
+                <td><h5>Дата публикации</h5></td>
+                <td><h5>Текст новости</h5></td>
+            </tr>
+            {% for post in filter_list %}
+                <tr>
+                    <td>{{ post.titlePost }}</td>
+                    <td>{{ post.dateCreate|date:'d M Y' }}</td>
+                    <td>{{ post.textPost|truncatewords:20}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    
+    {% else %}
+        <h2>Новостей нет</h2>
+
+    {% endif %}
+
+{% endblock %}

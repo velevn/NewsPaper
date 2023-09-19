@@ -10,11 +10,6 @@
     <h3>{% current_time '%b %d %Y' %}</h3>
     <hr>
 
-    <form action="" method="get">
-        {{ filterset.form.as_p }}
-        <input type="submit" value="Найти">
-    </form>
-
     <h5>Количество новостей: {{ posts_list|length}}</h5>
     {% if posts_list %}
         <table>

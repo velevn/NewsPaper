@@ -5,6 +5,8 @@ from .models import Post
 class PostFilter(FilterSet):
     class Meta:
         model = Post
-        fields = {
-            'titlePost':['icontains']
-        }
+        fields = [
+            'titlePost',
+            'categoryType',
+            'dateCreate'
+        ]

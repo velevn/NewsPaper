@@ -28,6 +28,9 @@ class Author(models.Model):
 class Category(models.Model):
     name_category = models.CharField(max_length=64, unique=True)
 
+    def __str__(self) -> str:
+        return f'{self.name_category}'
+
 
 class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
@@ -58,7 +61,7 @@ class Post(models.Model):
 
     def preview(self):
         return "{%s}" % (self.textPost[0:124])
-    
+
     def __str__(self) -> str:
         return f'{self.titlePost}: {self.textPost[:20]}'
 
@@ -66,7 +69,6 @@ class Post(models.Model):
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
         ordering = ('-dateCreate',)
-
 
 
 class PostCategory(models.Model):
