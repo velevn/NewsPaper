@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -64,6 +65,9 @@ class Post(models.Model):
 
     def __str__(self) -> str:
         return f'{self.titlePost}: {self.textPost[:20]}'
+    
+    def get_absolute_url(self):
+        return reverse('single_news', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Статья'

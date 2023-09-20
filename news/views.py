@@ -1,8 +1,8 @@
 from typing import Any
 from django.db.models.query import QuerySet
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
@@ -24,16 +24,14 @@ class PostDetail(DetailView):
 
 class SearchNews(ListView):
     model = Post
-    template_name = 'news/search_news.html'
+    template_name = 'news/search_post.html'
     context_object_name = 'filter_list'
+    paginate_by = 10
 
     def get_queryset(self) -> QuerySet[Any]:
         queryset = super().get_queryset()
-        if self.request.GET is None:
-            return queryset.none()
-        else:
-            self.filterset = PostFilter(self.request.GET, queryset)
-            return self.filterset.qs
+        self.filterset = PostFilter(self.request.GET, queryset)
+        return self.filterset.qs
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
@@ -41,16 +39,22 @@ class SearchNews(ListView):
         return context
 
 
-def create_post(request):
-    form = PostForm()
-    if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/news')
+class CreatePost(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'news/create_post.html'
 
-    return render(request, 'news/create_post.html', {'form': form})
 
+class UpdatePost(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'news/create_post.html'
+
+
+class DeletePost(DeleteView):
+    model = Post
+    template_name = 'news/delete_post.html'
+    success_url = reverse_lazy('news')
 
 def show_home(request):
     return render(request, 'news/index.html')
