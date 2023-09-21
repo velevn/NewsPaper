@@ -67,7 +67,7 @@ class Post(models.Model):
         return f'{self.titlePost}: {self.textPost[:20]}'
     
     def get_absolute_url(self):
-        return reverse('single_news', args=[str(self.id)])
+        return reverse('single_post', args=[str(self.id)])
 
     class Meta:
         verbose_name = 'Статья'
