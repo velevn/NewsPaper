@@ -1,8 +1,9 @@
 from collections.abc import Sequence
 from typing import Any
+from django.db import models
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
@@ -21,6 +22,20 @@ class NewsList(ListView):
         category_type = Post.objects.filter(categoryType='NW')
         return category_type
     
+
+# Вывод отдельной новости
+class NewsDetail(DetailView):
+    model = Post
+    template_name = 'news/single_post.html'
+    context_object_name = 'post_list'
+
+    def news_detail(request, pk):
+        post_id = Post.objects.get(pk=pk)
+        if post_id.categoryType == 'NW':
+            return render(request, 'news/single_post.html',context={'post_list':post_id})
+        else:
+            return render(request, 'news/404.html')
+
 
 # Создание новости
 class CreateNews(CreateView):
@@ -45,6 +60,19 @@ class ArticlesList(ListView):
         category_type = Post.objects.filter(categoryType='AR')
         return category_type
 
+# Вывод отдельной статьи
+class ArticlesDetail(DetailView):
+    model = Post
+    template_name = 'news/single_post.html'
+    context_object_name = 'post_list'
+
+    def articles_detail(request, pk):
+        post_id = Post.objects.get(pk=pk)
+        if post_id.categoryType == 'AR':
+            return render(request, 'news/single_post.html',context={'post_list':post_id})
+        else:
+            return render(request, 'news/404.html')
+
 
 # Создание статьи
 class CreateArticles(CreateView):
@@ -63,7 +91,7 @@ class PostDetail(DetailView):
     model = Post
     template_name = 'news/single_post.html'
     context_object_name = 'post_list'
-    paginate_by = 2
+
 
 # Поиск записи
 class SearchNews(ListView):
