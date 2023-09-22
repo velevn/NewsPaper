@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from news.views import show_home
+from news.views import show_home, NewsDetail, ArticlesDetail
 
 
 urlpatterns = [
@@ -24,4 +24,6 @@ urlpatterns = [
     path('', show_home, name='home'),
     path('news/', include('news.urls')),
     path('articles/', include('news.urls_ar')),
+    path('<str:ctg_type>/<int:id>', NewsDetail.news_detail, name='single_post'),
+    path('<str:ctg_type>/<int:id>', ArticlesDetail.articles_detail, name='single_post'),
 ]

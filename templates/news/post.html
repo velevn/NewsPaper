@@ -20,7 +20,7 @@
             </tr>
             {% for post in posts_list %}
                 <tr>
-                    <td>{{ post.titlePost }}</td>
+                    <td><a href="{{ post.get_absolute_url }}">{{ post.titlePost }}</a></td>
                     <td>{{ post.dateCreate|date:'d M Y' }}</td>
                     <td>{{ post.textPost|truncatewords:20}}</td>
                 </tr>

@@ -3,7 +3,6 @@ from .views import NewsList, NewsDetail,SearchNews, CreateNews, UpdatePost,Delet
 
 urlpatterns = [
     path('', NewsList.as_view(), name='news'),
-    path('<int:pk>', NewsDetail.news_detail, name='single_post'),
     path('create_news', CreateNews.as_view(), name='create_news'),
     path('search_post', SearchNews.as_view(), name='search_post'),
     path('<int:pk>/update',UpdatePost.as_view(), name='update'),

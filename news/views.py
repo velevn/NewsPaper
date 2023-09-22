@@ -11,13 +11,14 @@ from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
 
+
 # Выводим список всех новостей
 class NewsList(ListView):
     model = Post
     template_name = 'news/post.html'
     context_object_name = 'posts_list'
     paginate_by = 2
-
+    
     def get_queryset(self):
         category_type = Post.objects.filter(categoryType='NW')
         return category_type
