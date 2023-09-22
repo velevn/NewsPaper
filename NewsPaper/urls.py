@@ -22,6 +22,8 @@ from news.views import show_home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', show_home, name='home'),
+    path('accounts/', include('django.contrib.auth.urls'), name='login'),
+    path('accounts/',include('accounts.urls')),
     path('news/', include('news.urls')),
     path('articles/', include('news.urls_ar')),
 ]
