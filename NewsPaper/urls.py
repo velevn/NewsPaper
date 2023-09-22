@@ -24,6 +24,6 @@ urlpatterns = [
     path('', show_home, name='home'),
     path('news/', include('news.urls')),
     path('articles/', include('news.urls_ar')),
-    path('<str:ctg_type>/<int:id>', NewsDetail.news_detail, name='single_post'),
-    path('<str:ctg_type>/<int:id>', ArticlesDetail.articles_detail, name='single_post'),
+    
+    
 ]
