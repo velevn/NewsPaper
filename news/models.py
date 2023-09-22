@@ -68,9 +68,9 @@ class Post(models.Model):
     
     def get_absolute_url(self):
         if self.categoryType == 'NW':
-            return reverse('single_post', args=[str(self.id)])
+            return reverse('single_post1', kwargs={'pk':self.pk})
         else:
-            return reverse('single_post', args=[str(self.id)])
+            return reverse('single_post2', kwargs={'pk':self.pk})
 
     class Meta:
         verbose_name = 'Статья'
