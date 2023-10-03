@@ -12,17 +12,32 @@
 
     <h5>Количество новостей: {{ posts_list|length}}</h5>
     {% if posts_list %}
-        <table>
-            <tr>
-                <td><h5>Заголовок</h5></td>
-                <td><h5>Дата публикации</h5></td>
-                <td><h5>Текст новости</h5></td>
-            </tr>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Заголовок</th>
+                    <th>Дата публикации</th>
+                    <th>Текст новости</th>
+
+                    {% if perms.news.delete_post or perms.news.update_post %}
+                    <th>Действия</th>
+                    {% endif %}
+                </tr>
+            </thead>
             {% for post in posts_list %}
                 <tr>
                     <td><a href="{{ post.get_absolute_url }}">{{ post.titlePost }}</a></td>
                     <td>{{ post.dateCreate|date:'d M Y' }}</td>
                     <td>{{ post.textPost|truncatewords:20}}</td>
+                    <td>
+                        {% if perms.news.change_post %}
+                        <a href="{% url 'update' pk=post.id %}">Изменить</a>
+                        {% endif %}
+
+                        {% if perms.news.delete_post %}
+                        <a href="{% url 'delete' pk=post.id %}">Удалить</a>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </table>

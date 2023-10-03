@@ -1,12 +1,9 @@
-from collections.abc import Sequence
 from typing import Any
-from django.db import models
 from django.db.models.query import QuerySet
-from django.forms.models import BaseModelForm
-from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Post
 from .filters import PostFilter
 from .forms import PostForm
@@ -39,7 +36,9 @@ class NewsDetail(DetailView):
 
 
 # Создание новости
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
+    # raise_exception = True
+    permission_required = ('news.create_news',)
     model = Post
     form_class = PostForm
     template_name = 'news/create_post.html'
@@ -76,7 +75,9 @@ class ArticlesDetail(DetailView):
 
 
 # Создание статьи
-class CreateArticles(CreateView):
+class CreateArticles(LoginRequiredMixin, CreateView):
+    # raise_exception = True
+    permissions_required = ('news.create_articles',)
     model = Post
     form_class = PostForm
     template_name = 'news/create_post.html'
@@ -112,13 +113,15 @@ class SearchNews(ListView):
         return context
 
 # Обновление записи
-class UpdatePost(UpdateView):
+class UpdatePost(LoginRequiredMixin, UpdateView):
+    permissions_required = ('news.change_post',)
     form_class = PostForm
     model = Post
     template_name = 'news/create_post.html'
 
 # Удаление записи
-class DeletePost(DeleteView):
+class DeletePost(LoginRequiredMixin, DeleteView):
+    permissions_required = ('news.delete_post',)
     model = Post
     template_name = 'news/delete_post.html'
     success_url = reverse_lazy('home')
