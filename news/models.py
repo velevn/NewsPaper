@@ -4,10 +4,12 @@ from django.db.models import Sum
 from django.urls import reverse
 
 
+# Создает таблицу в БД с авторами
 class Author(models.Model):
     author = models.OneToOneField(User, on_delete=models.CASCADE)
     rating_user = models.IntegerField(default=0)
 
+    # функция, которая обновляет рэйтинг автора
     def update_rating(self):
         postRating = self.post_set.aggregate(postRat=Sum('rating'))
         postRat = 0
@@ -26,6 +28,7 @@ class Author(models.Model):
         verbose_name_plural = 'Авторы'
 
 
+    # Создает таблицу в БД с категориями
 class Category(models.Model):
     name_category = models.CharField(max_length=64, unique=True)
 
@@ -33,6 +36,7 @@ class Category(models.Model):
         return f'{self.name_category}'
 
 
+    # Создает таблицу в БД в которой хранятся Новости и Статьи
 class Post(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
 
@@ -65,12 +69,12 @@ class Post(models.Model):
 
     def __str__(self) -> str:
         return f'{self.titlePost}: {self.textPost[:20]}'
-    
+
     def get_absolute_url(self):
         if self.categoryType == 'NW':
-            return reverse('single_post1', kwargs={'pk':self.pk})
+            return reverse('single_post1', kwargs={'pk': self.pk})
         else:
-            return reverse('single_post2', kwargs={'pk':self.pk})
+            return reverse('single_post2', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Статья'
@@ -83,6 +87,7 @@ class PostCategory(models.Model):
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
 
 
+    # Создает таблицу в БД в которой хранятся комментарии к Новостям и Статьям
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)
     authorComment = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -97,3 +102,12 @@ class Comment(models.Model):
     def dislike(self):
         self.rating -= 1
         self.save()
+
+
+# Создает таблицу в БД в которой хранится информация от подписках
+# пользователей на Новости и Статьи
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        to=User, on_delete=models.CASCADE, related_name='subscription')
+    category = models.ForeignKey(
+        to='Category',on_delete=models.CASCADE,related_name='subscription')

@@ -1,10 +1,14 @@
 from typing import Any
+from django.db.models import Exists, OuterRef
 from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Post
+from django.contrib.auth.decorators import login_required
+
+from .models import Post,Subscription,Category
 from .filters import PostFilter
 from .forms import PostForm
 
@@ -126,6 +130,12 @@ class DeletePost(LoginRequiredMixin, DeleteView):
     template_name = 'news/delete_post.html'
     success_url = reverse_lazy('home')
 
+
+@login_required
+@csrf_protect
+def subscriptions(request):
+    categories_and_subscriptions = Category.objects.get()
+    
 
 def show_home(request):
     return render(request, 'news/index.html')
