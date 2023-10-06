@@ -134,11 +134,25 @@ class DeletePost(LoginRequiredMixin, DeleteView):
 @login_required
 @csrf_protect
 def subscriptions(request):
+    
+    #POST-запрос
+    if request.method == 'POST':
+        category_id = request.POST.get('category_id')
+        category = Category.objects.get(id=category_id)
+        action = request.POST.get('action')
+
+        if action == 'subscribe':
+            Subscription.objects.create(user=request.user, category=category)
+        elif action == 'unsubscribe':
+            Subscription.objects.filter(user=request.user, category=category).delete()
+
+    # GET-запрос
     categories_with_subscriptions = Category.objects.annotate(
         user_subscribed = Exists(
             Subscription.objects.filter(user = request.user, category = OuterRef('pk'))))
-
-    return render(request, 'news/subscriptions.html',{'categories':categories_with_subscriptions})
+    
+    return render(
+        request, 'news/subscriptions.html', {'categories':categories_with_subscriptions})
     
 
 def show_home(request):

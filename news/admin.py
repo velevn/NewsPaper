@@ -6,3 +6,4 @@ from .models import Author, Post, Comment, Category,Subscription
 admin.site.register(Author)
 admin.site.register(Post)
 admin.site.register(Subscription)
+admin.site.register(Category)

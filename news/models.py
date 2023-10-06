@@ -27,6 +27,9 @@ class Author(models.Model):
         verbose_name = 'Автор'
         verbose_name_plural = 'Авторы'
 
+    def __str__(self) -> str:
+        return f'{self.author}'
+
 
     # Создает таблицу в БД с категориями
 class Category(models.Model):

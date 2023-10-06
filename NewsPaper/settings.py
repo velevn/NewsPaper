@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'news',
     'accounts',
     'django_filters',
+    'django_apscheduler',
 
     'allauth',
     'allauth.account',
@@ -159,7 +160,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 #настройки для отправки писем
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = "nvelev@yandex.ru"
