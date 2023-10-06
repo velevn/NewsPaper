@@ -166,7 +166,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = "nvelev@yandex.ru"
-EMAIL_HOST_PASSWORD = "ocmwbvvswzvfkcnk"
+EMAIL_HOST_PASSWORD = ""
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
