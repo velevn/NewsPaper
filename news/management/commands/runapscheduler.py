@@ -1,6 +1,6 @@
-from datetime import datetime
+import datetime
 import logging
-
+from django.template.loader import render_to_string
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 from django.conf import settings
@@ -10,7 +10,7 @@ from django_apscheduler import util
 from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.models import DjangoJobExecution
 
-from news.models import Post
+from news.models import Post, Category
 
 logger = logging.getLogger(__name__)
 
@@ -18,10 +18,27 @@ logger = logging.getLogger(__name__)
 def my_job():
     today = datetime.datetime.now()
     last_week = today - datetime.timedelta(days=7)
-    post = Post.objects.filter(dateCreate__gte=last_week)
-    categories = set(post.values_list('postCategory__name', flat=True))
-    subscriptions = set(Category.objects.filter(name__in=categories).values_list('subscriptions__email', flat=True))
+    posts = Post.objects.filter(dateCreate__gte=last_week)
+    categories = set(posts.values_list('postCategory__name_category', flat=True))
+    subscriptions = set(Category.objects.filter(name_category__in=categories).values_list('subscription__user__email', flat=True))
 
+    text_content = render_to_string(
+        'news/daily_post.html',
+        {
+            'link':settings.SITE_URL,
+            'posts':posts
+        }
+    )
+    
+    
+    msg = EmailMultiAlternatives(
+        subject='Статьи за неделю',
+        body = '',
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=subscriptions
+    )
+    msg.attach_alternative(text_content, 'text/html')
+    msg.send()
 
 @util.close_old_connections
 def delete_old_job_executions(max_age=604_800):
@@ -37,7 +54,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             my_job,
-            trigger=CronTrigger(second="*/10"),
+            trigger=CronTrigger(day_of_week='fri', hour='18', minute='00'),
             id="my_job",  # The `id` assigned to each job MUST be unique
             max_instances=1,
             replace_existing=True,
@@ -46,9 +63,7 @@ class Command(BaseCommand):
 
         scheduler.add_job(
             delete_old_job_executions,
-            trigger=CronTrigger(
-                second="*/10"
-            ),
+            trigger=CronTrigger(),
             id="delete_old_job_executions",
             max_instances=1,
             replace_existing=True,
